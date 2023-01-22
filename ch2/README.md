@@ -46,6 +46,65 @@
 - exceeding characters will be truncated
 - trailing spaces are not removed
 
-### numeric data
+#### numeric data
 - ints: `tinyint`, `smallint`, `mediumint`, `int`, `bigint` / signed vs unsigned
 - floats: `float(p, s)`, `double(p, s)` => `p` for precision(allowable total digit number) / `s` for scale(for only the right side)
+
+#### temporal data
+- dates, times: `date`, `datetime`, `timestamp`, `year`, `time`
+- string formats: how the data will be constructed and represented
+
+## table creation
+
+### step1: design
+
+### step2: refinement
+- **normalization**: the process of ensuring that there are no duplicate or compound columns in your db design
+
+### step3: building sql schema statements
+- when you define a table, you need to tell the db server what column(s) will serve as the **primary ke**y for the table
+- validation: allowable values for certain columns
+
+```sql
+eye_color CHAR(2) CHECK (eye_color IN ('BR', 'BL', 'GR')),
+
+-- or 
+
+eye_color ENUM('BR', 'BL', 'GR')
+
+CONSTRAINT pk_person PRIMARY KEY (person_id)
+```
+
+- null: not applicable, unknown yet, empty set(enforcing `not null` could be possible)
+- **foreign key constraint**: allowing only the values found in the table specifed(modifiable later via `alter table` statement)
+
+```sql
+CONSTRAINT fk_fav_food_person_id FOREIGN KEY (person_id) REFERENCES person (person_id)
+```
+
+- checking the schema of a table: `DESCRIBE <your_table_name>`
+
+## populating and modifying tables
+
+### inserting data
+- you need to specify: table / columns / values
+
+#### generating nemeric key data
+- rather than manually looking up the max id value, 
+all db servers on the market provide a robust method for generating numeric keys
+
+- mysql: *auto-increment*
+
+```sql
+ALTER TABLE person MODIFY person_id SMALLINT UNSIGNED AUTO_INCREMENT;
+```
+(setting foreign key available/unavailable: `set foreign_key_checks=0(or 1)`)
+
+#### the insert statement
+
+```sql
+INSERT INTO person (
+    person_id, fname, lname, eye_color, birth_date
+) values (
+    null, 'William', 'Turner', 'BR', '1972-05-27'
+);
