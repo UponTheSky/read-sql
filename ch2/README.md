@@ -108,3 +108,40 @@ INSERT INTO person (
 ) values (
     null, 'William', 'Turner', 'BR', '1972-05-27'
 );
+```
+
+### updating data
+- can update (possbly multiple) data filtered by `WHERE`
+    - so beware that you don't omit `WHERE`, otherwise you'll update every row in the table
+
+```sql
+UPDATE person SET 
+    street = '1225 Tremont St.',
+    city = 'Boston',
+    state = 'MA',
+    country = 'USA',
+    postal_code = '02138',
+        WHERE person_id = 1;    
+```
+
+### deleting data
+- like `UPDATE`, beware of `WHERE` clause
+
+```sql
+DELETE FROM person
+    WHERE person_id = 2;
+```
+
+## when good statements go bad
+
+- non-unique primary key
+- non-existent foreign key
+- column value violations(in case of `ENUM`)
+- invalid data conversions(in case of the datetime formats)
+
+## the sakila database
+- droping tables
+
+```sql
+DROP TABLE favorite_food;
+```
